@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Արի Տուն - Պրեմիում Տուրեր Հայաստանում</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mardoto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e67e22;
+            --dark: #1a252f;
+            --light: #ffffff;
+            --accent: #f39c12;
+            --shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
+        
+        body { 
+            font-family: 'Mardoto', sans-serif; 
+            background: #f4f7f6; 
+            color: #333; 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Անիմացիաներ */
+        .reveal { opacity: 0; transform: translateY(30px); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Header */
+        header {
+            background: #1a252f;
+            padding: 60px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo-box { position: relative; }
+
+        .logo-box img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            background: white;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 100;
+        }
+
+        .logo-box img.expanded {
+            width: 320px;
+            height: 320px;
+            box-shadow: 0 0 60px rgba(230, 126, 34, 0.7);
+            transform: translateY(10px);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: white;
+            letter-spacing: 5px;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 60px 20px; }
+        .hidden { display: none !important; }
+
+        /* Մեր Մասին */
+        .about-box {
+            background: white;
+            padding: 50px;
+            border-radius: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 80px;
+            text-align: center;
+            border-bottom: 10px solid var(--primary);
+        }
+
+        .about-box h2 { font-size: 2.2rem; margin-bottom: 20px; color: var(--dark); }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feat-card {
+            background: #fff8f2;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #ffeada;
+        }
+
+        .feat-card span { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+        /* Գրիդ 2x2 */
+        .section-title { text-align: center; margin-bottom: 50px; font-size: 2.5rem; color: var(--dark); }
+
+        .main-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+            max-width: 1000px; 
+            margin: auto;
+        }
+
+        .dest-card { 
+            background: white; 
+            border-radius: 35px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            box-shadow: var(--shadow);
+            transition: 0.4s ease;
+        }
+
+        .dest-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+
+        .dest-card img { width: 100%; height: 350px; object-fit: cover; }
+
+        .dest-info { padding: 30px; text-align: center; }
+        .dest-info h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--dark); }
+
+        .btn-explore { 
+            display: inline-block; 
+            padding: 12px 30px; 
+            background: var(--primary); 
+            color: white; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        /* Մանրամասն էջ */
+        .back-nav {
+            margin-bottom: 30px;
+            padding: 12px 25px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-nav:hover { background: var(--primary); }
+
+        .hero-img { width: 100%; height: 500px; object-fit: cover; border-radius: 40px; margin-bottom: 40px; }
+
+        .details-body h2 { font-size: 3rem; color: var(--dark); margin-bottom: 20px; }
+        .details-body .desc { font-size: 1.3rem; color: #555; margin-bottom: 40px; }
+
+        .sights-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .sight-item {
+            display: flex;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 150px;
+        }
+
+        .sight-img-box { width: 150px; flex-shrink: 0; }
+        .sight-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .sight-text { padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+        .sight-text h4 { color: var(--primary); font-size: 1.2rem; margin-bottom: 5px; }
+
+        /* Surprise Section */
+        .surprise-section {
+            text-align: center;
+            margin: 80px 0;
+            padding: 60px;
+            background: white;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-surprise {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white; border: none; padding: 20px 50px;
+            font-size: 1.3rem; border-radius: 100px; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(230, 126, 34, 0.4);
+        }
+
+        .surprise-result { margin-top: 30px; min-height: 120px; font-weight: bold; }
+        
+        .spinning { animation: spin 0.1s infinite; }
+        @keyframes spin { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        .map-link {
+            display: inline-block; margin-top: 15px; padding: 10px 25px;
+            background: #4285F4; color: white; text-decoration: none; border-radius: 12px;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        @media (max-width: 850px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .hero-img { height: 350px; }
+            .about-box { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<header id="main-header">
+    <div class="logo-box">
+        <img src="./Gemini_Generated_Image_77t2877t2877t287.png" id="mainLogo" alt="Ari Tun Logo">
+    </div>
+    <h1>ԱՐԻ ՏՈՒՆ</h1>
+    <p>Բացահայտիր Հայաստանի թաքնված գանձերը մեր պրեմիում տուրերով</p>
+</header>
+
+<div class="container">
+    
+    <div id="home-content">
+        <section class="about-box reveal">
+            <h2>Մեր Մասին</h2>
+            <p>«Արի Տուն»-ը ավելին է, քան տուրիստական գործակալություն։ Մենք ստեղծում ենք հիշողություններ, որոնք մնում են ձեզ հետ ընդմիշտ։</p>
+            <div class="features">
+                <div class="feat-card"><span>🗺️</span><h4>Լավագույն Ուղղություններ</h4></div>
+                <div class="feat-card"><span>🛡️</span><h4>Անվտանգություն</h4></div>
+                <div class="feat-card"><span>💎</span><h4>Premium Սպասարկում</h4></div>
+            </div>
+        </section>
+
+        <h2 class="section-title reveal">Ընտրիր քո մարզը</h2>
+        <div class="main-grid reveal" id="destinations-grid"></div>
+
+        <div class="surprise-section reveal">
+            <h3>Չգիտե՞ս ուր գնալ</h3>
+            <p style="margin-bottom: 25px; color: #777;">Թույլ տուր պատահականությանը որոշել քո հաջորդ արկածը</p>
+            <button id="surpriseBtn" class="btn-surprise">🎲 Ընտրել Անակնկալ Տուր</button>
+            <div id="surpriseResult" class="surprise-result"></div>
+        </div>
+    </div>
+
+    <div id="details-page" class="hidden">
+        <button class="back-nav" onclick="closeDetails()">← ՀԵՏ ԴԵՊԻ ԳԼԽԱՎՈՐ</button>
+        <div id="dynamic-details"></div>
+    </div>
+
+</div>
+
+<footer>
+    <h2>ԱՐԻ ՏՈՒՆ</h2>
+    <p>© 2026 Բոլոր իրավունքները պաշտպանված են</p>
+    <p style="opacity: 0.5; margin-top: 15px;">Made with ❤️ for Armenia</p>
+</footer>
+
+<script>
+const data = {
+    lori: {
+        name: "Լոռու մարզ",
+        image: "https://visitdebedcanyon.com/wp-content/uploads/2020/10/monastery-of-haghpat-lori-province-armenia-min-1-1-1000x565.jpg",
+        description: "Լոռին Հայաստանի «կանաչ սիրտն» է, որտեղ միջնադարյան վանքերը ձուլված են անտառային բնությանը։",
+        sights: [
+            { n: "Հաղպատի վանք", d: "ՅՈՒՆԵՍԿՕ-ի համաշխարհային ժառանգություն։", p: "https://visitdebedcanyon.com/wp-content/uploads/2020/10/monastery-of-haghpat-lori-province-armenia-min-1-1-1000x565.jpg" },
+            { n: "Սանահինի վանք", d: "10-րդ դարի կրթական և հոգևոր հզոր կենտրոն։", p: "https://upload.wikimedia.org/wikipedia/commons/a/a3/Sanahin_Monastery.jpg" },
+            { n: "Դսեղ", d: "Հովհաննես Թումանյանի հայրենի գյուղը։", p: "https://dsegh.am/Images/Museums/House_Museum/House_Museum_Background_High.webp" }
+        ]
+    },
+    shirak: {
+        name: "Շիրակի մարզ",
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/86/Gyumri_general_view_from_the_central_square.jpg",
+        description: "Շիրակը մշակույթի և արհեստների օրրանն է, որտեղ ամեն քար պատմություն է պատմում։",
+        sights: [
+            { n: "Գյումրի", d: "Հայաստանի մշակութային մայրաքաղաքը։", p: "https://upload.wikimedia.org/wikipedia/commons/8/86/Gyumri_general_view_from_the_central_square.jpg" },
+            { n: "Սև Բերդ", d: "Պատմական ամրոց՝ յուրահատուկ ակուստիկայով։", p: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdiQjAlNbdWKix_4uMXFEOuGQVWbIMIi4tAA&s" },
+            { n: "Մարմաշեն", d: "Տուֆակերտ գլուխգործոց Ախուրյանի ափին։", p: "https://hyurservice.com/images/attractions/1/16117790436306/1200x630.webp" }
+        ]
+    },
+    tavush: {
+        name: "Տավուշի մարզ",
+        image: "https://avatars.mds.yandex.net/i?id=b277e37fb6c9b0c0d1c1476c4e12fc50_l-9873252-images-thumbs&n=13",
+        description: "Տավուշը Հայաստանի ամենախաղաղ ու գեղեցիկ անկյունն է՝ լի լճերով և անտառներով։",
+        sights: [
+            { n: "Պարզ լիճ", d: "Տավուշի մարզի ամենահայտնի լիճը։", p: "https://upload.wikimedia.org/wikipedia/commons/1/14/Parz_lake%2C_Dilijan%2C_Armenia_from_air_2022.jpg" },
+            { n: "Հաղարծին", d: "Ճարտարապետական գոհար անտառի խորքում։", p: "https://avatars.mds.yandex.net/i?id=b277e37fb6c9b0c0d1c1476c4e12fc50_l-9873252-images-thumbs&n=13" },
+            { n: "Գոշավանք", d: "Միջնադարյան համալսարան և հոգևոր կենտրոն։", p: "https://edentour.am/imgs/archive/goshavank-1.jpg" }
+        ]
+    },
+    syunik: {
+        name: "Սյունիքի մարզ",
+        image: "https://www.tourarmenia.am/wp-content/uploads/2018/09/Tatev-monastery-Ancient-Churches-in-Armenia.jpg",
+        description: "Սյունիքը հզորության և ուժի խորհրդանիշն է՝ բարձր լեռներով և անդունդներով։",
+        sights: [
+            { n: "Տաթևի վանք", d: "Հասնում ենք աշխարհի ամենաերկար ճոպանուղով։", p: "https://www.tourarmenia.am/wp-content/uploads/2018/09/Tatev-monastery-Ancient-Churches-in-Armenia.jpg" },
+            { n: "Խնձորեսկ", d: "Քարանձավային քաղաք և կախովի կամուրջ։", p: "https://hyurservice.com/images/blog/1/17573513764063/1200x630.webp" },
+            { n: "Քարահունջ", d: "Հայկական Սթոունհենջը (7500+ տարեկան)։", p: "https://d31qtdfy11mjj9.cloudfront.net/gallery/1566568432911024635.jpg" }
+        ]
+    }
+};
+
+function init() {
+    const grid = document.getElementById('destinations-grid');
+    grid.innerHTML = '';
+    for (let key in data) {
+        grid.innerHTML += `
+            <div class="dest-card" onclick="showDetails('${key}')">
+                <img src="${data[key].image}" alt="${data[key].name}">
+                <div class="dest-info">
+                    <h3>${data[key].name}</h3>
+                    <span class="btn-explore">Բացահայտել →</span>
+                </div>
+            </div>
+        `;
+    }
+    handleReveal();
+}
+
+function showDetails(key) {
+    const item = data[key];
+    const target = document.getElementById('dynamic-details');
+    target.innerHTML = `
+        <img src="${item.image}" class="hero-img">
+        <div class="details-body">
+            <h2>${item.name}</h2>
+            <p class="desc">${item.description}</p>
+            <h3 style="margin-bottom: 25px;">📍 Տեսարժան Վայրեր</h3>
+            <div class="sights-list">
+                ${item.sights.map(s => `
+                    <div class="sight-item">
+                        <div class="sight-img-box"><img src="${s.p}"></div>
+                        <div class="sight-text">
+                            <h4>${s.n}</h4>
+                            <p>${s.d}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    document.getElementById('home-content').classList.add('hidden');
+    document.getElementById('main-header').classList.add('hidden');
+    document.getElementById('details-page').classList.remove('hidden');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function closeDetails() {
+    document.getElementById('home-content').classList.remove('hidden');
+    document.getElementById('main-header').classList.remove('hidden');
+    document.getElementById('details-page').classList.add('hidden');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Surprise Tour Logic
+const provincesForSurprise = [
+    { name: "Լոռու մարզ", map: "https://www.google.com/maps/search/Lori+Province" },
+    { name: "Շիրակի մարզ", map: "https://www.google.com/maps/search/Shirak+Province" },
+    { name: "Սյունիքի մարզ", map: "https://www.google.com/maps/search/Syunik+Province" },
+    { name: "Տավուշի մարզ", map: "https://www.google.com/maps/search/Tavush+Province" }
+];
+
+document.getElementById('surpriseBtn').addEventListener('click', function() {
+    const res = document.getElementById('surpriseResult');
+    res.classList.add('spinning');
+    this.disabled = true;
+    let count = 0;
+    const interval = setInterval(() => {
+        res.innerHTML = `<span style="font-size: 1.8rem; color: #777;">${provincesForSurprise[Math.floor(Math.random()*provincesForSurprise.length)].name}</span>`;
+        if(count++ > 20) {
+            clearInterval(interval);
+            res.classList.remove('spinning');
+            const final = provincesForSurprise[Math.floor(Math.random()*provincesForSurprise.length)];
+            res.innerHTML = `
+                <div style="animation: bounce 0.5s;">
+                    <span style="font-size: 1rem; color: #e67e22; display: block;">Ձեր հաջորդ արկածը՝</span>
+                    <span style="font-size: 2.2rem; color: var(--dark);">${final.name}</span><br>
+                    <a href="${final.map}" target="_blank" class="map-link">📍 Տեսնել քարտեզի վրա</a>
+                </div>
+            `;
+            this.disabled = false;
+        }
+    }, 80);
+});
+
+// Logo scale logic
+document.getElementById('mainLogo').addEventListener('click', function() {
+    this.classList.toggle('expanded');
+});
+
+function handleReveal() {
+    document.querySelectorAll(".reveal").forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
+    });
+}
+
+window.addEventListener("scroll", handleReveal);
+window.onload = init;
+</script>
+
+</body>
+</html>
